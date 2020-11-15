@@ -186,7 +186,7 @@ int DeroulementPartie(int caseJoueurInit, int somme, int caseVictoire, int caseM
 
         printf("Votre nouvelle case est la case : %d. Il s'agit d'une case oie\n",caseJoueur);
         caseJoueur=caseJoueur+somme; //on ajoute encore une fois la somme vu que le déplacmeent double
-        printf("Vous doublez alors votre déplacement ce qui revient a aller sur la case : %d\n\n",caseJoueur);
+        printf("Vous doublez alors votre deplacement ce qui revient a aller sur la case : %d\n\n",caseJoueur);
     }
     //tête de mort : case 58
     else if(caseJoueur==caseMort){
@@ -210,7 +210,7 @@ int DeroulementPartie(int caseJoueurInit, int somme, int caseVictoire, int caseM
 
 char ChoixAbandonnerPartie(char charAbandon, char pasAbandon){
     //BUT: Demander au joueur de choisir un caractère pour savoir s'il veut poursuivre le jeu ou non
-    //ENTREE: rien
+    //ENTREE: caractère indiquant oui comme réponse à l'abandon et carct indiquant non à l'abandon
     //SORTIE: caractère choisi
 
     char choix='n';
@@ -219,10 +219,10 @@ char ChoixAbandonnerPartie(char charAbandon, char pasAbandon){
     scanf("%c",&choix);
     printf("\n\n");
 
-    if((choix!=charAbandon) || (choix!=pasAbandon)){
-    printf("Ceci n'est pas l'un des deux caractere demande. Le jeu va alors se poursuivre. Veuillez appuyer sur entree pour continuer");
+    //if((choix!=charAbandon) || (choix!=pasAbandon)){
+   // printf("Ceci n'est pas l'un des deux caractere demande. Le jeu va alors se poursuivre. Veuillez appuyer sur entree pour continuer");
 
-    }
+
     system("cls"); //clear screen de windows
     return choix;
 }
