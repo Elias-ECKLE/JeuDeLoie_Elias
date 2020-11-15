@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h> //on inclut une biblio pour utiliser la fct aléatoire (lancer de dé)
 
+
 const int valeurMin_de=2;
 const int valeurMax_de=12;
 const int caseA_Atteindre=66;
@@ -9,6 +10,7 @@ const int caseTeteDeMort=58;
 const int multipleCasesOie=9;
 const int multipleOie_exception=63;
 const char charAbandonPartie='o';
+const char charPasAbandonnerPartie='n';
 
 
 
@@ -17,7 +19,7 @@ void AffichMessage(int);
 int LancerDeDes(int,int,int);
 int Somme(int,int);
 int DeroulementPartie(int,int,int,int,int,int);
-char ChoixAbandonnerPartie();
+char ChoixAbandonnerPartie(char,char);
 int PartieEstFinie(int,int, int, char,char);
 
 
@@ -63,7 +65,7 @@ int main()
         placeJoueur=DeroulementPartie(placeJoueur,sommeDes, caseA_Atteindre,caseTeteDeMort,multipleCasesOie,multipleOie_exception);
 
             //on demande au joueur s'il veut arrêter la partie en cours ou non
-        charEstAbandon= ChoixAbandonnerPartie();
+        charEstAbandon= ChoixAbandonnerPartie(charAbandonPartie,charPasAbandonnerPartie);
         etatDeLaPartie=PartieEstFinie(etatDeLaPartie, placeJoueur, caseA_Atteindre, charEstAbandon, charAbandonPartie);
 
 
@@ -93,7 +95,9 @@ void AffichMessage(int choixMessage){
     {
         case 0 :
         printf("Bienvenue dans le jeu de l oie. Il consiste a atteindre la case 66 du plateau\n");
-        printf("Pour cela, vous devez lancer deux des et leur somme vous permettra d'avancer d'autant de case que vous avez de chiffres\n\n\n\n");
+        printf("Pour cela vous devez lancer deux des, et leur somme vous permettra d'avancer d'autant de case que vous avez de chiffres\n");
+        printf("Appuyez sur entree pour commencer une partie. Bon courage.\n\n");
+        printf("PS : PS5 is coming\n\n\n");
         break;
 
         case 1:
@@ -101,7 +105,9 @@ void AffichMessage(int choixMessage){
         break;
 
         case -1:
-        printf("Vous avez fait le choix d'abandonner la partie\n");
+        printf("Vous avez fait le choix d'abandonner la partie\n Si vous souhaitez y rejouer, veuillez relancer l'executable\n");
+        printf("A bientot\n\n\n");
+
         break;
     }
 }
@@ -119,18 +125,19 @@ int LancerDeDes(int lancerDe, int min, int max){
     //SORTIE: chiffre du dé obtenu (par l'utilisation d'un random)
 
     int nbDe=1; //par défaut, le chiffre inscrit sur le dé est à 1
+    getchar();
 
     if(lancerDe==1){
         printf("Veuillez appuyer sur entree pour lancer le premier de :");
         nbDe=(rand()%(max-min+1)) + min;//nb aléatoire entre 1 et 6
         getchar(); // touche entree
-        printf("Le résultat du premier de est : %d\n\n",nbDe);
+        printf("Le resultat du premier de est : %d\n\n",nbDe);
     }
     else if (lancerDe==2){
         printf("Veuillez appuyer sur entree pour lancer le deuxieme de :");
         nbDe=(rand()%(max-min+1)) + min;//nb aléatoire entre 1 et 6
         getchar(); //touche entree
-        printf("Le résultat du deuxieme de est : %d\n\n\n\n",nbDe);
+        printf("Le resultat du deuxieme de est : %d\n\n\n\n",nbDe);
     }
 
     return nbDe;
@@ -152,9 +159,13 @@ int Somme(int nbDe_1, int nbDe_2){
 
 
 int DeroulementPartie(int caseJoueurInit, int somme, int caseVictoire, int caseMort, int multiple, int multipleException){
-    //BUT:
-    //ENTREE:
-    //SORTIE:
+    //BUT:déterminer le déplacement que fait le joueur en fct de la somme des dés et des règles du jeu
+    //reculer si on se trouve au delà de la case 66
+    //doubler le déplacement sur les cases oie
+    //retour case 0 tête de mort
+
+    //ENTREE:case du joueur actuelle, somme des dés, case victoire (66),case de mort (58),multiple 9, case excpetion 63
+    //SORTIE: nouvelle case du joueur
 
     int caseJoueur=caseJoueurInit;
         //on ajoute la somme des dés à la place du joueur où il se trouve
@@ -165,7 +176,7 @@ int DeroulementPartie(int caseJoueurInit, int somme, int caseVictoire, int caseM
     //si on dépasse 66, on recule de la différence entre la nouvelle case et 66, le tout à partir de la case sur laquelle on se trouve initialement
     if(caseJoueur>caseVictoire){
 
-        printf("Vous avez depasse la case victoire du nombre de %d. ",caseVictoire);
+        printf("Vous avez depasse la case victoire du nombre de %d car le nombre de votre case actuelle est : %d. ",caseVictoire,caseJoueur);
         printf("Vous devez alors reculer de la difference entre votre nouvelle case, soit %d et celle voulue\n",caseJoueur);
         caseJoueur=caseJoueurInit-(caseJoueur-caseVictoire);
         printf("Ce qui revient a etre sur la case : %d\n\n\n",caseJoueur);
@@ -184,6 +195,7 @@ int DeroulementPartie(int caseJoueurInit, int somme, int caseVictoire, int caseM
         caseJoueur=0;
         printf("Vous revenez alors a la case 0\n\n");
     }
+    //par défaut message indiquant à quelle case on se trouve à présent
     else{
 
         printf("Vous avez avance de %d cases. ",somme);
@@ -196,7 +208,7 @@ int DeroulementPartie(int caseJoueurInit, int somme, int caseVictoire, int caseM
 
 
 
-char ChoixAbandonnerPartie(){
+char ChoixAbandonnerPartie(char charAbandon, char pasAbandon){
     //BUT: Demander au joueur de choisir un caractère pour savoir s'il veut poursuivre le jeu ou non
     //ENTREE: rien
     //SORTIE: caractère choisi
@@ -207,6 +219,11 @@ char ChoixAbandonnerPartie(){
     scanf("%c",&choix);
     printf("\n\n");
 
+    if((choix!=charAbandon) || (choix!=pasAbandon)){
+    printf("Ceci n'est pas l'un des deux caractere demande. Le jeu va alors se poursuivre. Veuillez appuyer sur entree pour continuer");
+
+    }
+    system("cls"); //clear screen de windows
     return choix;
 }
 
