@@ -1,0 +1,7 @@
+#ignorer avec la valeur absolue, chemin entier
+
+#/testGit/bin/Debug/testGit.exe
+#/testGit/obj/Debug/main.o
+
+*.exe
+*.o
